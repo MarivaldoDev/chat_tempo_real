@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<body>
+    <h2>Chat - Sala: {{ room_name }}</h2>
+    <input id="messageInput" type="text" placeholder="Digite uma mensagem...">
+    <button id="sendBtn" onclick="sendMessage()" disabled>Enviar</button>
+    <ul id="chat"></ul>
+
+    <script>
+        const sendBtn = document.getElementById("sendBtn");
+        const roomName = "{{ room_name }}"; // Recebe o nome da sala do Django
+        const chatSocket = new WebSocket(
+            'wss://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onopen = function(e) {
+            console.log('WebSocket aberto');
+            sendBtn.disabled = false; 
+        };
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log('Mensagem recebida:', data.message);  // Log para verificar a mensagem recebida
+            document.getElementById("chat").innerHTML += `<li>${data.message}</li>`;
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('O WebSocket foi fechado', e);
+        };
+
+        chatSocket.onerror = function(e) {
+            console.error('Erro no WebSocket', e);
+        };
+
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            if (chatSocket.readyState === WebSocket.OPEN) {  // Verifique se o WebSocket está aberto
+                console.log("Enviando:", input.value);  // Log da mensagem sendo enviada
+                chatSocket.send(JSON.stringify({ 'message': input.value }));
+                input.value = '';  // Limpar campo de entrada
+            } else {
+                console.error("WebSocket não está aberto.");
+            }
+        }
+    </script>
+</body>
+</html>
