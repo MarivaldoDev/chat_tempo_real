@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'global/css/register.css' %}">
+</head>
+<body>
+  <div class="register-container">
+    <h1>📝 Crie sua conta</h1>
+
+    {% if success_message %}
+      <div class="success-message">{{ success_message }}</div>
+    {% endif %}
+    
+    <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <input type="text" name="username" placeholder="Nome de usuário" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Senha" required>
+      <input type="file" name="avatar" accept="image/*">
+      <textarea name="bio" rows="3" placeholder="Sua bio (opcional)"></textarea>
+      <button type="submit">Criar Conta</button>
+    </form>
+    <div class="links">
+      <a href="/login">Já possui uma conta?</a>
+    </div>
+    <div class="footer">Feito com 💙 por você em Django + Channels</div>
+  </div>
+</body>
+</html>

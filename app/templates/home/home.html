@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar no Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'global/css/home.css' %}">
+</head>
+<body>
+  <div class="login-container">
+    <h1>💬 Bem-vindo ao RealTime Chat</h1>
+    <form action="/chat/" method="get">
+      <input type="text" name="username" placeholder="Digite seu nome..." required>
+      <input type="text" name="room" placeholder="Nome da sala..." required>
+      <button type="submit">Entrar na Sala</button>
+    </form>
+    <div class="links">
+      <a href="{% url 'register' %}">Já possui conta?</a><br>
+    </div>
+    <div class="footer">Feito com 💙 por você em Django + Channels</div>
+  </div>
+</body>
+</html>
