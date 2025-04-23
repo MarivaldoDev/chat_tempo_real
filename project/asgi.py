@@ -1,13 +1,18 @@
 import os
-from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
-import app.routing  # O arquivo que conterá as rotas WebSocket
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+import app.routing  # use o nome do seu app com routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SEUPROJETO.settings')  # ajuste para o nome do seu projeto
+
+django_asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "websocket": URLRouter(
-        app.routing.websocket_urlpatterns
+    "http": django_asgi_app,  # ✅ isso resolve o erro
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            app.routing.websocket_urlpatterns
+        )
     ),
 })

@@ -5,21 +5,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Entrar no Chat</title>
+  <link rel="shortcut icon" href="{% static 'global/images/chat.ico' %}" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'global/css/home.css' %}">
 </head>
 <body>
   <div class="login-container">
+    {% for message in messages%}
+      {% if 'error' in message.tags %}
+        <div class="error-message">{{ message }}</div>
+      {% else %}
+        <div class="success-message">{{ message }}</div>
+      {% endif %}
+    {% endfor %}
     <h1>💬 Bem-vindo ao RealTime Chat</h1>
-    <form action="/chat/" method="get">
-      <input type="text" name="username" placeholder="Digite seu nome..." required>
-      <input type="text" name="room" placeholder="Nome da sala..." required>
+    <form action="{% url 'home' %}" method="POST">
+      <input type="text" name="username" placeholder="Digite seu nome de usuário..." required>{% csrf_token %}
+      <input type="password" name="password" placeholder="Digite sua senha..." required>
       <button type="submit">Entrar na Sala</button>
     </form>
     <div class="links">
-      <a href="{% url 'register' %}">Já possui conta?</a><br>
+      <a href="{% url 'register' %}">Não possui conta? Clique aqui!</a><br>
     </div>
-    <div class="footer">Feito com 💙 por você em Django + Channels</div>
+    <div class="footer">Aproveita aí</div>
   </div>
 </body>
 </html>

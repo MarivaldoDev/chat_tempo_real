@@ -39,6 +39,15 @@ margin-bottom: 20px;
 font-size: 1rem;
 }
 
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
 button {
 background-color: #ffffff;
 color: #1e3c72;
@@ -72,4 +81,22 @@ text-decoration: underline;
 font-size: 0.9rem;
 display: inline-block;
 margin: 6px 0;
+}
+
+.success-message {
+    background-color: rgba(76, 175, 80, 0.9);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.error-message {
+    background-color: rgba(207, 33, 33, 0.9);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
 }

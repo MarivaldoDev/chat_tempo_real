@@ -1,9 +1,25 @@
 from django.shortcuts import render, redirect
 from .models import User
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
 from django.http import HttpResponse
 
 
 def home(request):
+    if request.method == "GET":
+        return render(request, 'home/home.html')
+    
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    user = authenticate(request, username=username, password=password)
+    print(user)
+    if user:
+        login(request, user)
+        return redirect('room', room_name='conversem')
+
+    messages.error(request, "Nome de usuário ou senha inválidos!")
     return render(request, 'home/home.html')
 
 
@@ -16,13 +32,16 @@ def register(request):
         bio = request.POST.get('bio')
 
         if User.objects.filter(username=username).exists():
-            return HttpResponse("Esse nome de usuário já existe.")
+            messages.error(request, "Esse nome de usuário já existe.")
+            return render(request, 'home/register.html')
         elif User.objects.filter(email=email).exists():
-            return HttpResponse("Esse email já está cadastrado.")
+            messages.error(request, "Esse email já está cadastrado.")
+            return render(request, 'home/register.html')
         else:
-            user = User(username=username, email=email, password=password, image_profile=image, bio=bio)
+            user = User(username=username, email=email, password=make_password(password), image_profile=image, bio=bio)
             user.save()
-            return render(request, 'home/register.html', {"success_message": "Usuário cadastrado com sucesso!"})
+            messages.success(request, "Você está cadastrado! Faça Login para conversar com alguém.")
+            return redirect('home')
     
     return render(request, 'home/register.html')
      

@@ -26,6 +26,10 @@ SECRET_KEY = 'django-insecure-#$3#w5s33e&#jfwu_9xa@6iam(()@m!z-juzj-*l!k@6rvx3bx
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://98e2-2804-29b8-51a6-4541-937-2b0e-bf8a-49e2.ngrok-free.app',
+# ]
+
 
 
 # Application definition
@@ -71,6 +75,7 @@ TEMPLATES = [
 
 # WSGI_APPLICATION = 'project.wsgi.application'
 ASGI_APPLICATION = 'project.asgi.application'
+AUTH_USER_MODEL = 'app.User'
 
 CHANNEL_LAYERS = {
     "default": {

@@ -88,3 +88,12 @@ margin-top: 20px;
     margin-bottom: 20px;
     font-size: 0.95rem;
 }
+
+.error-message {
+    background-color: rgba(244, 67, 54, 0.9);
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
