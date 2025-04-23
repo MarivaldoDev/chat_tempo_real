@@ -5,14 +5,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="shortcut icon" href="{% static 'global/images/chat.ico' %}" type="image/x-icon">
-  <link rel="stylesheet" href="{% static 'global/css/chat.css' %}"/>
+  <link rel="stylesheet" href="{% static 'global/css/chat.css' %}" />
   <title>Chat em Tempo Real</title>
 </head>
 <body data-user-id="{{ request.user.id }}" data-room="{{ room_name }}">
   <header>💬 {{ room_name }}</header>
   <div class="chat-container">
-    <div class="messages" id="messages">
+    <div class="chat-header">
+      <span>Sala: {{ room_name }}</span>
+      <span class="online-count">Online: 0</span>
     </div>
+    <div class="messages" id="messages"></div>
     <div class="input-container">
       <input type="text" id="input" placeholder="Digite sua mensagem..." />
       <button onclick="sendMessage()">Enviar</button>

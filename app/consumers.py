@@ -33,7 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': message,
                 'username': self.user.username,
                 'user_id': self.user.id,
-                'image_profile': self.user.image_profile.url if self.user.image_profile else None
+                'image_profile': self.user.image_profile.url if self.user.image_profile else '/static/global/images/image_default.png'
             }
         )
 

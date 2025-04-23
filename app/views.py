@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
@@ -45,6 +45,12 @@ def register(request):
     
     return render(request, 'home/register.html')
      
+
+def my_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    print(user)
+    return render(request, 'profiles/profile.html', {'user_profile': user})
+
 
 def room(request, room_name):
     return render(request, 'chat/chat.html', {'room_name': room_name})

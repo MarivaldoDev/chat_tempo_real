@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'global/css/profile.css' %}" />
+  <title>Perfil do Usuário</title>
+</head>
+<body>
+  <div class="profile-container">
+    {% if user_profile.image_profile %}
+      <img src="{{ user_profile.image_profile.url }}" alt="Foto de perfil" class="profile-img" />
+    {% else %}
+      <img src="{% static 'global/images/image_default.png' %}" alt="Foto de perfil padrão" class="profile-img" />
+    {% endif %}
+    <div class="username">@{{ user_profile.username }}</div>
+    <div class="bio">{{ user_profile.bio|default:"..." }}</div>
+  </div>
+  </div>
+</body>
+</html>

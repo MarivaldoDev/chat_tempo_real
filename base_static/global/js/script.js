@@ -1,14 +1,3 @@
-// const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-// fetch('/sua-url/', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json',
-//     'X-CSRFToken': csrftoken,
-//   },
-//   body: JSON.stringify({ /* seus dados */ }),
-// });
-
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');
 const sendBtn = document.getElementById('sendBtn');
@@ -33,19 +22,18 @@ chatSocket.onmessage = function (e) {
   msgDiv.className = 'message';
 
   if (data.user_id === currentUserId) {
-    msgDiv.classList.add('user');  // mensagem enviada por você
+    msgDiv.classList.add('user');
   } else {
-    msgDiv.classList.add('bot');   // mensagem de outra pessoa
+    msgDiv.classList.add('bot');
   }
 
-  const profileImg = data.image_profile
-    ? `<img src="${data.image_profile}" class="profile-img" alt="${data.username}">`
-    : `<div class="profile-placeholder">${data.username[0]}</div>`;
+  const profileImg = `<img src="${data.image_profile}" class="profile-img" alt="${data.username}">`;
+  const usernameLink = `<a href="/myprofile/${data.username}/" class="chat-username"><strong>${data.username}</strong></a>`;
 
   msgDiv.innerHTML = `
     <div class="user-info">
       ${profileImg}
-      <strong>${data.username}</strong>
+      ${usernameLink}
     </div>
     <p>${data.message}</p>
   `;
@@ -61,16 +49,23 @@ function sendMessage() {
   const text = input.value.trim();
   if (!text || chatSocket.readyState !== WebSocket.OPEN) return;
 
-  // Exibe imediatamente a sua mensagem no estilo "user"
   const userDiv = document.createElement('div');
-
   messages.appendChild(userDiv);
   messages.scrollTop = messages.scrollHeight;
 
-  // Envia para o servidor
   chatSocket.send(JSON.stringify({ message: text }));
   input.value = '';
 }
 
 input.addEventListener("keydown", e => e.key === "Enter" && sendMessage());
 sendBtn.addEventListener("click", sendMessage);
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest(".chat-username");
+  if (el) {
+    const username = el.textContent.replace('@', '').trim();
+    if (username) {
+      window.location.href = `/myprofile/${username}/`;
+    }
+  }
+});
