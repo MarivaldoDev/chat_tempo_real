@@ -13,12 +13,12 @@
   <div class="chat-container">
     <div class="chat-header">
       <span>Sala: {{ room_name }}</span>
-      <span class="online-count">Online: 0</span>
+      <div id="online-count" class="online-count">🟢 0 usuários online</div>
     </div>
     <div class="messages" id="messages"></div>
     <div class="input-container">
       <input type="text" id="input" placeholder="Digite sua mensagem..." />
-      <button onclick="sendMessage()">Enviar</button>
+      <button onclick="sendMessage()" id="sendBtn">Enviar</button>
     </div>
   </div>
   <script src="{% static 'global/js/script.js' %}"></script>

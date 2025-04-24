@@ -2,25 +2,31 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 
+user_conections = {}
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f"chat_{self.room_name}"
         self.user = self.scope["user"]
 
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
-
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
+        if self.room_group_name not in user_conections:
+            user_conections[self.room_group_name] = set()
+
+        user_conections[self.room_group_name].add(self.user.id)
+        await self.send_online_count()
+
+
     async def disconnect(self, close_code):
-        if hasattr(self, "room_group_name"):
-            await self.channel_layer.group_discard(
-                self.room_group_name,
-                self.channel_name
-            )
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+        if self.room_group_name in user_conections:
+            user_conections[self.room_group_name].discard(self.user.id)
+            await self.send_online_count()
+
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -43,4 +49,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'username': event['username'],
             'user_id': event['user_id'],
             'image_profile': event['image_profile']
+        }))
+
+    async def send_online_count(self):
+        total_online = len(user_conections[self.room_group_name])
+        await self.channel_layer.group_send(
+            self.room_group_name, {'type': 'online_count', 'count': total_online})
+
+    async def online_count(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'online_count',
+            'count': event['count']
         }))

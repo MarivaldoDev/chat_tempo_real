@@ -1,6 +1,7 @@
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');
 const sendBtn = document.getElementById('sendBtn');
+const onlineCount = document.getElementById('online-count');  // 👈 novo
 
 const roomName = document.body.dataset.room || "sala123";
 const currentUserId = parseInt(document.body.dataset.userId);
@@ -12,11 +13,18 @@ const chatSocket = new WebSocket(
 
 chatSocket.onopen = function () {
   console.log('✅ Conectado ao WebSocket');
-  sendBtn.disabled = false;
+  if (sendBtn) sendBtn.disabled = false;
 };
 
 chatSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
+
+  if (data.type === 'online_count') {
+    if (onlineCount) {
+      onlineCount.textContent = `🟢 ${data.count - 1} usuário${data.count > 1 ? 's' : ''} online`;
+    }
+    return;
+  }
 
   const msgDiv = document.createElement('div');
   msgDiv.className = 'message';
@@ -48,10 +56,6 @@ chatSocket.onerror = (e) => console.error('❌ Erro no WebSocket', e);
 function sendMessage() {
   const text = input.value.trim();
   if (!text || chatSocket.readyState !== WebSocket.OPEN) return;
-
-  const userDiv = document.createElement('div');
-  messages.appendChild(userDiv);
-  messages.scrollTop = messages.scrollHeight;
 
   chatSocket.send(JSON.stringify({ message: text }));
   input.value = '';
