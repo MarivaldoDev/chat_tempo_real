@@ -9,10 +9,23 @@
   <title>Chat em Tempo Real</title>
 </head>
 <body data-user-id="{{ request.user.id }}" data-room="{{ room_name }}">
-  <header>💬 {{ room_name }}</header>
+  <header>
+    <div class="room-name">💬 {{ room_name }}</div>
+      <div class="dropdown">
+      {% if request.user.image_profile %}
+        <img src="{{ request.user.image_profile.url }}" alt="Perfil" class="profile-pic">
+      {% else %}
+        <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
+      {% endif %}
+      <div class="dropdown-content">    
+        <a href="{% url 'my_profile' request.user.username %}">Ver Perfil</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
+  </header>
   <div class="chat-container">
     <div class="chat-header">
-      <span>Sala: {{ room_name }}</span>
+      <span>{{ ''}}</span>
       <div id="online-count" class="online-count">🟢 0 usuários online</div>
     </div>
     <div class="messages" id="messages"></div>
@@ -21,6 +34,7 @@
       <button onclick="sendMessage()" id="sendBtn">Enviar</button>
     </div>
   </div>
+  <audio id="notification-sound" src="{% static 'global/sounds/notification.mp3' %}" preload="auto"></audio>
   <script src="{% static 'global/js/script.js' %}"></script>
 </body>
 </html>

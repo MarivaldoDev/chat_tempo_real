@@ -19,9 +19,10 @@
       {% endif %}
     {% endfor %}
     <h1>💬 Bem-vindo ao RealTime Chat</h1>
-    <form action="{% url 'home' %}" method="POST">
-      <input type="text" name="username" placeholder="Digite seu nome de usuário..." required>{% csrf_token %}
-      <input type="password" name="password" placeholder="Digite sua senha..." required>
+    <form action="{% url 'home' %}" method="POST">{% csrf_token %}
+      {% for field in form %}
+        {{ field }}
+      {% endfor %}
       <button type="submit">Entrar na Sala</button>
     </form>
     <div class="links">

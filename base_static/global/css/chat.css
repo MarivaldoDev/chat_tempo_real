@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -6,15 +12,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100vh;
+  height: 90vh;
 }
 header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: #2b6cb0;
   color: white;
   padding: 1rem 2rem;
   width: 100%;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
   position: sticky;
   top: 0;
@@ -122,4 +131,52 @@ header {
 
 p{
   font-size: 16px;
+}
+
+.room-name {
+  font-weight: bold;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  display: block;
+  background: none; /* Remove qualquer fundo */
+  border: none; /* Remove borda padrão */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #ffffff;
+  min-width: 120px; /* menor */
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 8px 12px; /* padding menor */
+  text-decoration: none;
+  font-size: 14px; /* fonte menor */
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

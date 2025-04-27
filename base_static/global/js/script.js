@@ -2,6 +2,8 @@ const input = document.getElementById('input');
 const messages = document.getElementById('messages');
 const sendBtn = document.getElementById('sendBtn');
 const onlineCount = document.getElementById('online-count');  // 👈 novo
+const sound = document.getElementById('notification-sound');
+
 
 const roomName = document.body.dataset.room || "sala123";
 const currentUserId = parseInt(document.body.dataset.userId);
@@ -33,6 +35,9 @@ chatSocket.onmessage = function (e) {
     msgDiv.classList.add('user');
   } else {
     msgDiv.classList.add('bot');
+    if (sound && chatSocket.readyState === WebSocket.OPEN) {
+      sound.play().catch(err => console.error('Erro ao tocar som:', err));
+    }  
   }
 
   const profileImg = `<img src="${data.image_profile}" class="profile-img" alt="${data.username}">`;
