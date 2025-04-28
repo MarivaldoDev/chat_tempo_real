@@ -1,5 +1,6 @@
 from django import forms
 from .models import User
+from django.contrib.auth import authenticate
 
 
 class LoginForm(forms.Form):
@@ -14,13 +15,19 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(attrs={'placeholder': 'Digite sua senha...', 'required': True})
     )
 
-    def clean_fields(self):
-        username = self.cleaned_data.get('username')
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+
         if not User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Esse nome de usuário não existe.")
-        if not User.objects.filter(username=username, password=self.cleaned_data.get('password')).exists():
-            raise forms.ValidationError("Senha incorreta.")
-        return username
+            raise forms.ValidationError("Esse nome de usuário não existe!")
+
+        user = authenticate(username=username, password=password)
+        if user is None:
+            raise forms.ValidationError("Senha incorreta!")
+        
+        return cleaned_data
 
 
 class UserForm(forms.ModelForm):

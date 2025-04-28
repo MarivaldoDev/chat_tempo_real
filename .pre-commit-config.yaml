@@ -1,0 +1,9 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: requirements
+        name: atualizando requirements.txt
+        entry: cmd /c "venv\Scripts\activate && pip freeze > requirements.txt && git add requirements.txt"
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]

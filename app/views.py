@@ -22,10 +22,9 @@ def home(request):
         if user:
             login(request, user)
             return redirect('room', room_name='testes')
-        for error in form.errors.items():
-            for erro in error:
-                messages.error(request, error)
-
+    else:
+        for error in form.errors:
+                messages.error(request, form.errors[error])
     return render(request, 'home/home.html', {'form': form})
 
 
