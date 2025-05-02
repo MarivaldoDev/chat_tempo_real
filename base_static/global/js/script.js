@@ -3,7 +3,10 @@ const messages = document.getElementById('messages');
 const sendBtn = document.getElementById('sendBtn');
 const onlineCount = document.getElementById('online-count');  // 👈 novo
 const sound = document.getElementById('notification-sound');
+const typingIndicator = document.getElementById('typing-indicator'); // 👈 adicionado
 
+let typingTimer;
+const TYPING_INTERVAL = 3000;
 
 const roomName = document.body.dataset.room || "sala123";
 const currentUserId = parseInt(document.body.dataset.userId);
@@ -25,6 +28,16 @@ chatSocket.onmessage = function (e) {
     if (onlineCount) {
       onlineCount.textContent = `🟢 ${data.count - 1} usuário${data.count > 1 ? 's' : ''} online`;
     }
+    return;
+  }
+
+  if (data.type === 'typing') {
+    showTypingIndicator(data.username);
+    return;
+  }
+
+  if (data.type === 'stop_typing') {
+    hideTypingIndicator();
     return;
   }
 
@@ -69,6 +82,33 @@ function sendMessage() {
 input.addEventListener("keydown", e => e.key === "Enter" && sendMessage());
 sendBtn.addEventListener("click", sendMessage);
 
+// 👉 Adição da lógica de "digitando..."
+input.addEventListener("input", () => {
+  clearTimeout(typingTimer);
+
+  chatSocket.send(JSON.stringify({
+    type: "typing"
+  }));
+
+  typingTimer = setTimeout(() => {
+    chatSocket.send(JSON.stringify({
+      type: "stop_typing"
+    }));
+  }, TYPING_INTERVAL);
+});
+
+function showTypingIndicator(username) {
+  if (username === undefined || username === null || username === "") return;
+  typingIndicator.textContent = `${username} está digitando...`;
+  typingIndicator.style.display = "block";
+}
+
+function hideTypingIndicator() {
+  typingIndicator.textContent = "";
+  typingIndicator.style.display = "none";
+}
+
+// mantém seus links de perfil
 document.addEventListener("click", (e) => {
   const el = e.target.closest(".chat-username");
   if (el) {

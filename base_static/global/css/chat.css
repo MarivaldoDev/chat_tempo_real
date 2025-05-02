@@ -180,3 +180,18 @@ p{
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+#typing-indicator {
+  padding: 0.5rem 1rem;
+  font-style: italic;
+  color: #fffafa;
+  background-color: #3022c6;
+  text-align: left;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.9; }
+  100% { opacity: 1; }
+}

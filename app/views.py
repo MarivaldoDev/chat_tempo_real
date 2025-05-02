@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, LoginForm
 from django.contrib.auth.decorators import login_required
+import cowsay
 
 
 def home(request):
@@ -21,6 +22,7 @@ def home(request):
 
         if user:
             login(request, user)
+            cowsay.tux(f'Usuário {username} fez login!')
             return redirect('room', room_name='testes')
     else:
         for error in form.errors:
