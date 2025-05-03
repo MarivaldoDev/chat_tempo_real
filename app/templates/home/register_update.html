@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Cadastro</title>
+    {% include 'partials/_links.html' %}
+</head>
+<body>
+    <div class="register-container">
+        {% include 'partials/_messages.html' %}
+        <h1>📝 Atualize sua conta</h1>
+        <form action="{% url 'register_update' user.id %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            {% include 'partials/_register-form.html' %}
+            <button type="submit">Atualizar Conta</button>
+        </form>
+    </div>
+</body>
+</html>

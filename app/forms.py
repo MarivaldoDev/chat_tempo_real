@@ -44,15 +44,19 @@ class UserForm(forms.ModelForm):
         }
  
     def clean_username(self):
+        current_username = self.instance.username
         username = self.cleaned_data.get('username')
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Esse nome de usuário já existe.")
+        if current_username != username:
+            if User.objects.filter(username=username).exists():
+                raise forms.ValidationError("Esse nome de usuário já existe.")
         return username
     
     def clean_email(self):
+        current_email = self.instance.email
         email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Esse e-mail já existe.")
+        if current_email != email:
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("Esse e-mail já existe.")
         return email
     
     def clean_password(self):

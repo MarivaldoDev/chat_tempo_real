@@ -8,6 +8,13 @@
   <title>Perfil do Usuário</title>
 </head>
 <body>
+  <header>
+    <div class="header-left">Meu Perfil</div>
+    <div class="header-right">
+      <a href="{% url 'register_update' user.id %}">Atualizar Perfil</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </div>
+  </header>  
   <div class="profile-container">
     {% if user_profile.image_profile %}
       <img src="{{ user_profile.image_profile.url }}" alt="Foto de perfil" class="profile-img" />

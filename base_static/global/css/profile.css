@@ -31,3 +31,35 @@ body {
     margin: 0 auto;
     padding: 0 1rem;
   }
+
+  header {
+    background-color: #2b6cb0;
+    color: white;
+    padding: 1rem 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-family: 'Segoe UI', sans-serif;
+    position: absolute;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .header-left {
+    font-weight: bold;
+    margin-right: 2rem;
+  }
+  
+  .header-right a {
+    color: white;
+    margin-left: 2rem;
+    text-decoration: none;
+    font-weight: normal;
+  }
+  
+  .header-right a:hover {
+    text-decoration: underline;
+  }
+  

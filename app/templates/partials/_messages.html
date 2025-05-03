@@ -1,0 +1,8 @@
+{% load static %}
+{% for message in messages%}
+    {% if 'error' in message.tags %}
+        <div class="error-message">{{ message }}</div>
+    {% else %}
+        <div class="success-message">{{ message }}</div>
+    {% endif %}
+{% endfor %}

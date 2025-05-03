@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, LoginForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 import cowsay
 
 
@@ -48,6 +49,29 @@ def register(request):
         for error in form.errors:
             messages.error(request, form.errors[error])
     return render(request, 'home/register.html', {'form': form})
+
+
+@login_required(login_url='home')
+def register_update(request, id: int):
+    user = get_object_or_404(User, id=id)
+    form = UserForm(instance=user)
+
+    if request.method == "POST":
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.password = make_password(form.cleaned_data['password'])
+            user.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Usuário atualizado com sucesso!")
+            print('ok')
+            return redirect('my_profile', username=user.username)
+
+        if form.errors:
+            for error in form.errors:
+                messages.error(request, form.errors[error])
+             
+    return render(request, 'home/register_update.html', {'form': form, 'user': user})
      
 
 @login_required(login_url='home')
