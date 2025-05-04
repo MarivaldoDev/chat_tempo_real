@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Acesso Negado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'global/css/acesso_negado.css' %}">
+    <title>Acesso Negado</title>
+</head>
+<body>
+    <div>
+        <img src="{% static 'global/images/not.gif' %}" alt="Acesso Negado" width="300">
+        <h1>Você não tem permissão para acessar esta página.</h1>
+        <p>Redirecionando em <span id="timer">5</span> segundos...</p>
+    </div>
+    <script src="{% static 'global/js/acesso_negado.js' %}"></script>
+</body>
+</html>

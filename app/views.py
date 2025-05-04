@@ -6,6 +6,7 @@ from django.contrib import messages
 from .forms import UserForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from django.http import HttpResponseForbidden
 import cowsay
 
 
@@ -51,11 +52,14 @@ def register(request):
     return render(request, 'home/register.html', {'form': form})
 
 
-@login_required(login_url='home')
+@login_required(login_url='acesso_negado')
 def register_update(request, id: int):
     user = get_object_or_404(User, id=id)
     form = UserForm(instance=user)
-
+    
+    if user != request.user:
+        print(user, request.user)
+        return redirect('acesso_negado')
     if request.method == "POST":
         form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
@@ -63,9 +67,8 @@ def register_update(request, id: int):
             user.password = make_password(form.cleaned_data['password'])
             user.save()
             update_session_auth_hash(request, user)
-            messages.success(request, "Usuário atualizado com sucesso!")
             print('ok')
-            return redirect('my_profile', username=user.username)
+            return redirect('my_profile', username=request.user.username)
 
         if form.errors:
             for error in form.errors:
@@ -74,10 +77,11 @@ def register_update(request, id: int):
     return render(request, 'home/register_update.html', {'form': form, 'user': user})
      
 
-@login_required(login_url='home')
-def my_profile(request, username):
+@login_required(login_url='acesso_negado')
+def my_profile(request, username: str):
     user = get_object_or_404(User, username=username)
-    print(user)
+    if user != request.user:
+        return redirect('acesso_negado')
     return render(request, 'profiles/profile.html', {'user_profile': user})
 
 
@@ -88,5 +92,9 @@ def logout_view(request):
 
 
 @login_required(login_url='home')
-def room(request, room_name):
+def room(request, room_name: str):
     return render(request, 'chat/chat.html', {'room_name': room_name})
+
+
+def acesso_negado(request):
+    return HttpResponseForbidden(render(request, 'home/acesso_negado.html'))

@@ -1,65 +1,147 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to right, #f8fafc, #e2e8f0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 90vh;
-    text-align: center;
-    padding: 2rem;
-  }
-  .profile-img {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .username {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 1rem;
-  }
-  .bio {
-    font-size: 1.5rem;
-    color: #2d3748;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  header {
-    background-color: #2b6cb0;
-    color: white;
-    padding: 1rem 2rem;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.2rem;
-    font-family: 'Segoe UI', sans-serif;
-    position: absolute;
-    top: 0;
-    z-index: 1000;
-  }
-  
-  .header-left {
-    font-weight: bold;
-    margin-right: 2rem;
-  }
-  
-  .header-right a {
-    color: white;
-    margin-left: 2rem;
-    text-decoration: none;
-    font-weight: normal;
-  }
-  
-  .header-right a:hover {
-    text-decoration: underline;
-  }
-  
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f4f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 90vh;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #2b6cb0;
+  color: white;
+  padding: 1rem 2rem;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.room-name {
+  font-weight: bold;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  display: block;
+  background: none; /* Remove qualquer fundo */
+  border: none; /* Remove borda padrão */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #ffffff;
+  min-width: 120px; /* menor */
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 8px 12px; /* padding menor */
+  text-decoration: none;
+  font-size: 14px; /* fonte menor */
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* CONTAINER do perfil */
+.profile-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+/* Foto do perfil grande */
+.profile-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.username {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 1rem;
+}
+
+.bio {
+  font-size: 1.25rem;
+  color: #2d3748;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+
+button{
+  background-color: #2b6cb0;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 6rem auto 0;
+}
+
+button:hover {
+  background-color: #2c5282;
+  transform: translateY(-2px);
+}
+
+button:active {
+  background-color: #2a4365;
+  transform: translateY(0);
+}
+
+a{
+  text-decoration: none;
+  color: white
+}

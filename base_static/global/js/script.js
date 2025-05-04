@@ -6,7 +6,7 @@ const sound = document.getElementById('notification-sound');
 const typingIndicator = document.getElementById('typing-indicator'); // 👈 adicionado
 
 let typingTimer;
-const TYPING_INTERVAL = 2000;
+const TYPING_INTERVAL = 1000;
 
 const roomName = document.body.dataset.room || "sala123";
 const currentUserId = parseInt(document.body.dataset.userId);
