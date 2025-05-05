@@ -80,9 +80,7 @@ def register_update(request, id: int):
 @login_required(login_url='acesso_negado')
 def my_profile(request, username: str):
     user = get_object_or_404(User, username=username)
-    if user != request.user:
-        return redirect('acesso_negado')
-    return render(request, 'profiles/profile.html', {'user_profile': user})
+    return render(request, 'profiles/profile.html', {'user': user, 'request_user': request.user})
 
 
 @login_required(login_url='home')

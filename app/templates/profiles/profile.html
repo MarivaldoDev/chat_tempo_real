@@ -12,8 +12,8 @@
   <header>
     <div class="room-name">Meu Perfil</div>
       <div class="dropdown">
-      {% if request.user.image_profile %}
-        <img src="{{ request.user.image_profile.url }}" alt="Perfil" class="profile-pic">
+      {% if user.image_profile %}
+        <img src="{{ user.image_profile.url }}" alt="Perfil" class="profile-pic">
       {% else %}
         <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
       {% endif %}
@@ -23,16 +23,18 @@
     </div>
   </header>
   <div class="profile-container">
-    {% if user_profile.image_profile %}
-      <img src="{{ user_profile.image_profile.url }}" alt="Foto de perfil" class="profile-img" />
+    {% if user.image_profile %}
+      <img src="{{ user.image_profile.url }}" alt="Foto de perfil" class="profile-img" />
     {% else %}
       <img src="{% static 'global/images/image_default.png' %}" alt="Foto de perfil padrão" class="profile-img" />
     {% endif %}
-    <div class="username">@{{ user_profile.username }}</div>
-    <div class="bio">{{ user_profile.bio|default:"..." }}</div>
-    <button>
-      <a href="{% url 'register_update' user.id %}">Atualizar Perfil</a>
-    </button>
+    <div class="username">@{{ user.username }}</div>
+    <div class="bio">{{ user.bio|default:"..." }}</div>
+    {% if not user != request.user %}
+      <button>
+        <a href="{% url 'register_update' user.id %}">Atualizar Perfil</a>
+      </button>
+    {% endif %}
   </div>
   </div>
 </body>
