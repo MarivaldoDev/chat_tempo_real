@@ -1,9 +1,9 @@
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');
 const sendBtn = document.getElementById('sendBtn');
-const onlineCount = document.getElementById('online-count');  // 👈 novo
+const onlineCount = document.getElementById('online-count');
 const sound = document.getElementById('notification-sound');
-const typingIndicator = document.getElementById('typing-indicator'); // 👈 adicionado
+const typingIndicator = document.getElementById('typing-indicator');
 
 let typingTimer;
 const TYPING_INTERVAL = 1000;
@@ -26,46 +26,61 @@ chatSocket.onmessage = function (e) {
 
   if (data.type === 'online_count') {
     if (onlineCount) {
-      onlineCount.textContent = `🟢 ${data.count - 1} usuário${data.count > 1 ? 's' : ''} online`;
+      const onlineUsers = data.count - 1;
+      onlineCount.textContent = `🟢 ${onlineUsers} usuário${onlineUsers === 1 ? '' : 's'} online`;
     }
     return;
   }
 
   if (data.type === 'typing') {
-    showTypingIndicator(data.username);
+    if (data.user_id !== currentUserId) {
+      showTypingIndicator(data.username);
+    }
     return;
   }
 
   if (data.type === 'stop_typing') {
-    hideTypingIndicator();
+    if (data.user_id !== currentUserId) {
+      hideTypingIndicator();
+    }
     return;
   }
 
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'message';
+  if (data.type === "chat_message") {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message';
+  
+    if (data.user_id === currentUserId) {
+      msgDiv.classList.add('user');
+    } else {
+      msgDiv.classList.add('bot');
+      if (sound && chatSocket.readyState === WebSocket.OPEN) {
+        sound.play().catch(err => console.error('Erro ao tocar som:', err));
+      }
+    }
+  
+    const username = data.username || "Usuário";
+    const profileImg = `<img src="${data.image_profile}" class="profile-img" alt="${username}">`;
+    const usernameLink = data.username
+      ? `<a href="/myprofile/${username}/" class="chat-username"><strong>${username}</strong></a>`
+      : `<strong>${username}</strong>`;
 
-  if (data.user_id === currentUserId) {
-    msgDiv.classList.add('user');
-  } else {
-    msgDiv.classList.add('bot');
-    if (sound && chatSocket.readyState === WebSocket.OPEN) {
-      sound.play().catch(err => console.error('Erro ao tocar som:', err));
-    }  
+    const hora = data.timestamp
+    ? new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    : "";
+  
+    msgDiv.innerHTML = `
+      <div class="user-info">
+        ${profileImg}
+        ${usernameLink}
+        <span class="timestamp">${hora}</span>
+      </div>
+      <p>${data.message}</p>
+    `;
+  
+    messages.appendChild(msgDiv);
+    messages.scrollTop = messages.scrollHeight;
   }
-
-  const profileImg = `<img src="${data.image_profile}" class="profile-img" alt="${data.username}">`;
-  const usernameLink = `<a href="/myprofile/${data.username}/" class="chat-username"><strong>${data.username}</strong></a>`;
-
-  msgDiv.innerHTML = `
-    <div class="user-info">
-      ${profileImg}
-      ${usernameLink}
-    </div>
-    <p>${data.message}</p>
-  `;
-
-  messages.appendChild(msgDiv);
-  messages.scrollTop = messages.scrollHeight;
 };
 
 chatSocket.onclose = () => console.error('❌ WebSocket fechado');
@@ -79,10 +94,17 @@ function sendMessage() {
   input.value = '';
 }
 
-input.addEventListener("keydown", e => e.key === "Enter" && sendMessage());
+// Previne comportamento padrão do Enter (evita recarregar página)
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
 sendBtn.addEventListener("click", sendMessage);
 
-// 👉 Adição da lógica de "digitando..."
+// Detecção de digitação
 input.addEventListener("input", () => {
   clearTimeout(typingTimer);
 
@@ -98,7 +120,7 @@ input.addEventListener("input", () => {
 });
 
 function showTypingIndicator(username) {
-  if (username === undefined || username === null || username === "") return;
+  if (!username) return;
   typingIndicator.textContent = `${username} está digitando...`;
   typingIndicator.style.display = "block";
 }
@@ -107,14 +129,3 @@ function hideTypingIndicator() {
   typingIndicator.textContent = "";
   typingIndicator.style.display = "none";
 }
-
-// mantém seus links de perfil
-document.addEventListener("click", (e) => {
-  const el = e.target.closest(".chat-username");
-  if (el) {
-    const username = el.textContent.replace('@', '').trim();
-    if (username) {
-      window.location.href = `/myprofile/${username}/`;
-    }
-  }
-});

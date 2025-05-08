@@ -24,7 +24,7 @@ def home(request):
 
         if user:
             login(request, user)
-            cowsay.tux(f'Usuário {username} fez login!')
+            cowsay.python(f'Usuário {username} fez login!')
             return redirect('room', room_name='testes')
     else:
         for error in form.errors:
