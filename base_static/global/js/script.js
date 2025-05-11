@@ -69,14 +69,16 @@ chatSocket.onmessage = function (e) {
     ? new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     : "";
   
-    msgDiv.innerHTML = `
+  msgDiv.innerHTML = `
+    <div class="message-bubble">
       <div class="user-info">
         ${profileImg}
         ${usernameLink}
-        <span class="timestamp">${hora}</span>
       </div>
       <p>${data.message}</p>
-    `;
+    </div>
+    <span class="timestamp">${hora}</span>
+  `;
   
     messages.appendChild(msgDiv);
     messages.scrollTop = messages.scrollHeight;
