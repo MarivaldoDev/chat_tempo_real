@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'global/css/chats.css' %}">
+    {% include 'partials/_links.html' %}
+    <title>Chats Disponíveis</title>
+</head>
+<body>
+    <div class="chat-list">
+    <h2>Chats Disponíveis</h2>
+    <ul>
+        {% for chat in chats %}
+            <li>
+                <a href="{% url 'room' chat %}">{{ chat }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>

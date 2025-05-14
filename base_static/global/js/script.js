@@ -121,6 +121,7 @@ input.addEventListener("input", () => {
   }, TYPING_INTERVAL);
 });
 
+
 function showTypingIndicator(username) {
   if (!username) return;
   typingIndicator.textContent = `${username} está digitando...`;

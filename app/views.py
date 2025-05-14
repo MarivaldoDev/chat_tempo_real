@@ -58,7 +58,6 @@ def register_update(request, id: int):
     form = UserForm(instance=user)
     
     if user != request.user:
-        print(user, request.user)
         return redirect('acesso_negado')
     if request.method == "POST":
         form = UserForm(request.POST, request.FILES, instance=user)
@@ -87,6 +86,12 @@ def my_profile(request, username: str):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+
+def chats(request):
+    rooms = ['chat1', 'chat2', 'chat3', 'chat4', 'chat5']
+    if request.method == 'GET':
+        return render(request, 'chat/chats.html', {"chats": rooms})
 
 
 @login_required(login_url='home')

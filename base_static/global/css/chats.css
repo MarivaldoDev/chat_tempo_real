@@ -1,0 +1,60 @@
+/* Estilo geral */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Cabeçalho da lista de chats */
+.chat-list h2 {
+    text-align: center;
+    margin-top: 50px; /* Aumenta o espaçamento superior */
+    margin-bottom: 30px; /* Adiciona espaçamento inferior */
+    color: #444;
+}
+
+/* Lista de chats */
+.chat-list ul {
+    display: flex; /* Alinha os itens em linha */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os itens */
+    gap: 20px; /* Espaçamento entre os itens */
+    padding: 0;
+    margin: 0 auto;
+    max-width: 800px; /* Aumenta a largura máxima */
+    background: none; /* Remove o fundo da lista */
+    border-radius: 0; /* Remove bordas arredondadas da lista */
+    box-shadow: none; /* Remove a sombra da lista */
+}
+
+/* Itens da lista */
+.chat-list ul li {
+    border: none; /* Remove a borda inferior */
+}
+
+/* Links dos chats */
+.chat-list ul li a {
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 18px;
+    background-color: #fff; /* Fundo branco para os "quadrados" */
+    border-radius: 8px; /* Bordas arredondadas para os "quadrados" */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona sombra aos "quadrados" */
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    text-align: center; /* Centraliza o texto */
+    width: 150px; /* Define uma largura fixa */
+    height: 100px; /* Define uma altura fixa */
+    display: flex; /* Para centralizar o texto verticalmente */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+}
+
+.chat-list ul li a:hover {
+    background-color: #007bff;
+    color: #fff;
+    transform: scale(1.05); /* Aumenta levemente o tamanho no hover */
+}
