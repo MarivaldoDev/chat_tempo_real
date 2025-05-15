@@ -2,18 +2,22 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
-from .models import Message
+from .models import Message, Room
 from channels.db import database_sync_to_async
 
 User = get_user_model()
 
 class ChatConsumer(AsyncWebsocketConsumer):
     # Armazena usuários online por sala
-    online_users = dict()  # Ex: {'sala123': set(user_ids)}
+    online_users = dict()
 
     @database_sync_to_async
     def get_recent_messages(self):
         return list(Message.objects.select_related('user').order_by('-timestamp')[:50])
+    
+    @database_sync_to_async
+    def get_room_by_name(self, name):
+        return Room.objects.get(name=name)
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -102,13 +106,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "user_id": self.user.id
                 }
             )
-    # manter o bloco de envio de mensagem
-
+ 
         elif "message" in data:
             message = data["message"]
 
-            msg = await database_sync_to_async(Message.objects.create)(
+            room = await self.get_room_by_name(self.room_name)
+
+            await database_sync_to_async(Message.objects.create)(
                 user=self.user,
+                room=room,
                 content=message,
                 timestamp=now()
             )

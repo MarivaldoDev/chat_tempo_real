@@ -1,60 +1,130 @@
-/* Estilo geral */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-/* Cabeçalho da lista de chats */
-.chat-list h2 {
-    text-align: center;
-    margin-top: 50px; /* Aumenta o espaçamento superior */
-    margin-bottom: 30px; /* Adiciona espaçamento inferior */
-    color: #444;
+.header {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-/* Lista de chats */
-.chat-list ul {
-    display: flex; /* Alinha os itens em linha */
-    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
-    justify-content: center; /* Centraliza os itens */
-    gap: 20px; /* Espaçamento entre os itens */
-    padding: 0;
-    margin: 0 auto;
-    max-width: 800px; /* Aumenta a largura máxima */
-    background: none; /* Remove o fundo da lista */
-    border-radius: 0; /* Remove bordas arredondadas da lista */
-    box-shadow: none; /* Remove a sombra da lista */
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 5rem;
 }
 
-/* Itens da lista */
-.chat-list ul li {
-    border: none; /* Remove a borda inferior */
+.create-room {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
 }
 
-/* Links dos chats */
-.chat-list ul li a {
-    display: block;
-    padding: 20px;
-    text-decoration: none;
-    color: #007bff;
-    font-size: 18px;
-    background-color: #fff; /* Fundo branco para os "quadrados" */
-    border-radius: 8px; /* Bordas arredondadas para os "quadrados" */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona sombra aos "quadrados" */
-    transition: background-color 0.3s, color 0.3s, transform 0.2s;
-    text-align: center; /* Centraliza o texto */
-    width: 150px; /* Define uma largura fixa */
-    height: 100px; /* Define uma altura fixa */
-    display: flex; /* Para centralizar o texto verticalmente */
-    align-items: center; /* Centraliza verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
+.btn-create-room {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #1e3c72;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.chat-list ul li a:hover {
-    background-color: #007bff;
-    color: #fff;
-    transform: scale(1.05); /* Aumenta levemente o tamanho no hover */
+.btn-create-room:hover {
+  background-color: #dcdcdc;
+  transform: scale(1.05);
+}
+
+.chat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.chat-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.chat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.chat-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.chat-description {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #ddd;
+}
+
+.chat-users {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  color: #bbb;
+}
+
+.btn-enter-room {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #1e3c72;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-enter-room:hover {
+  background-color: #dcdcdc;
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .btn-create-room {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  .chat-title {
+    font-size: 1.3rem;
+  }
+
+  .chat-description {
+    font-size: 0.9rem;
+  }
+
+  .chat-users {
+    font-size: 0.8rem;
+  }
 }

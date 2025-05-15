@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Room
 from django.contrib.auth import authenticate
 
 
@@ -64,3 +64,20 @@ class UserForm(forms.ModelForm):
         if len(password) < 8:
             raise forms.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return password
+
+
+class ChatForm(forms.ModelForm):
+    class Meta:
+        model = Room
+        fields = ('name', 'description')
+
+        widgets = {
+            'name': forms.TextInput(attrs={'name': 'name', 'placeholder': 'Nome da sala', 'required': True}),
+            'description': forms.Textarea(attrs={'name': 'description', 'placeholder': 'Descrição da sala (Opcional)', 'rows': 3})
+        }
+
+        def clean_name(self):
+            name = self.cleaned_data.get('name')
+            if Room.objects.filter(name=name).exists():
+                raise forms.ValidationError("Esse nome de sala já existe.")
+            return name

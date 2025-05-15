@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import User
+from .models import User, Room
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import UserForm, LoginForm
+from .forms import UserForm, LoginForm, ChatForm 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseForbidden
@@ -28,7 +28,7 @@ def home(request):
             return redirect('room', room_name='testes')
     else:
         for error in form.errors:
-                messages.error(request, form.errors[error])
+            messages.error(request, form.errors[error])
     return render(request, 'home/home.html', {'form': form})
 
 
@@ -89,14 +89,37 @@ def logout_view(request):
 
 
 def chats(request):
-    rooms = ['chat1', 'chat2', 'chat3', 'chat4', 'chat5']
+    rooms = Room.objects.all()
+    return render(request, 'chat/chats.html', {"chats": rooms})
+
+
+def create_chat(request):
+    form = ChatForm()
     if request.method == 'GET':
-        return render(request, 'chat/chats.html', {"chats": rooms})
+        return render(request, 'chat/create_chat.html', {'form': form})
+    
+    form = ChatForm(request.POST)
+    if form.is_valid():
+        room = form.save(commit=False)
+        room.save()
+        room.users.add(request.user)
+        messages.success(request, "Sala criada com sucesso!")
+        return redirect('room', room_name=room.name)
+    
+    return render(request, 'chat/create_chat.html', {'form': form})
 
 
 @login_required(login_url='home')
 def room(request, room_name: str):
-    return render(request, 'chat/chat.html', {'room_name': room_name})
+    room = get_object_or_404(Room, name=room_name)
+    messages = room.messages.all().order_by('-timestamp')
+
+
+    return render(request, 'chat/chat.html', {
+        'room_name': room_name,
+        'room': room, 
+        'messages': messages
+    })
 
 
 def acesso_negado(request):
