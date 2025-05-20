@@ -7,7 +7,12 @@ from .forms import UserForm, LoginForm, ChatForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseForbidden
+from django_redis import get_redis_connection
 import cowsay
+
+
+def get_online_key(room_name):
+    return f"online_users:{room_name}"
 
 
 def home(request):
@@ -25,7 +30,7 @@ def home(request):
         if user:
             login(request, user)
             cowsay.python(f'Usuário {username} fez login!')
-            return redirect('room', room_name='testes')
+            return redirect('chats')
     else:
         for error in form.errors:
             messages.error(request, form.errors[error])
@@ -88,9 +93,16 @@ def logout_view(request):
     return redirect('home')
 
 
-def chats(request):
+def lobby(request):
     rooms = Room.objects.all()
-    return render(request, 'chat/chats.html', {"chats": rooms})
+    redis = get_redis_connection("default")
+
+    online_counts = {}
+    for room in rooms:
+        count = redis.scard(get_online_key(room.name))
+        online_counts[room.name] = count
+    
+    return render(request, 'chat/lobby.html', {"chats": rooms, 'onlines': online_counts})
 
 
 def create_chat(request):
@@ -118,7 +130,7 @@ def room(request, room_name: str):
     return render(request, 'chat/chat.html', {
         'room_name': room_name,
         'room': room, 
-        'messages': messages
+        'messages': messages,
     })
 
 

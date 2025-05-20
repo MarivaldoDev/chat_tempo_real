@@ -4,33 +4,63 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 from .models import Message, Room
 from channels.db import database_sync_to_async
+from django_redis import get_redis_connection
 
 User = get_user_model()
 
-class ChatConsumer(AsyncWebsocketConsumer):
-    # Armazena usuários online por sala
-    online_users = dict()
+def get_redis():
+    return get_redis_connection("default")
 
+def get_online_key(room_name):
+    return f"online_users:{room_name}"
+
+@database_sync_to_async
+def add_user_online(room_name, user_id):
+    conn = get_redis_connection("default")
+    conn.sadd(get_online_key(room_name), user_id)
+
+@database_sync_to_async
+def remove_user_online(room_name, user_id):
+    conn = get_redis_connection("default")
+    conn.srem(get_online_key(room_name), user_id)
+
+@database_sync_to_async
+def count_users_online(room_name):
+    conn = get_redis_connection("default")
+    return conn.scard(get_online_key(room_name))
+
+
+
+class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
-    def get_recent_messages(self):
-        return list(Message.objects.select_related('user').order_by('-timestamp')[:50])
+    def get_recent_messages(self, room):
+        return list(
+            Message.objects
+            .select_related('user', 'room')
+            .filter(room=room)
+            .order_by('-timestamp')[:50]
+        )
     
     @database_sync_to_async
     def get_room_by_name(self, name):
         return Room.objects.get(name=name)
+
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f"chat_{self.room_name}"
         self.user = self.scope["user"]
 
+        if not self.user.is_authenticated:
+            await self.close()
+            return
+
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
         # Adiciona usuário à lista de online
-        if self.room_name not in ChatConsumer.online_users:
-            ChatConsumer.online_users[self.room_name] = set()
-        ChatConsumer.online_users[self.room_name].add(self.user.id)
+        conn = get_redis_connection("default")
+        conn.sadd(get_online_key(self.room_name), self.user.id)
 
         # Envia contagem atualizada
         await self.send_online_count()
@@ -47,7 +77,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         # Mensagens recentes
-        recent_messages = await self.get_recent_messages()
+        room = await self.get_room_by_name(self.room_name)
+        recent_messages = await self.get_recent_messages(room)
         for msg in reversed(recent_messages):
             await self.send(text_data=json.dumps({
                 'type': 'chat_message',
@@ -60,13 +91,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        if self.user.is_authenticated:
+            await remove_user_online(self.room_name, self.user.id)
+            await self.send_online_count()
 
-        # Remove usuário da lista de online
-        if self.room_name in ChatConsumer.online_users:
-            ChatConsumer.online_users[self.room_name].discard(self.user.id)
-
-        # Envia contagem atualizada
-        await self.send_online_count()
 
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -77,7 +105,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def send_online_count(self):
-        count = len(ChatConsumer.online_users.get(self.room_name, set()))
+        count = await count_users_online(self.room_name)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -85,6 +113,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "count": count
             }
         )
+
+        await self.channel_layer.group_send(
+        "lobby",
+        {
+            "type": "user_count_update",
+            "room": self.room_name,
+            "count": count
+        }
+    )
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -171,3 +208,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "type": "online_count",
             "count": event["count"]
         }))
+
+
+
+class LobbyConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.channel_layer.group_add("lobby", self.channel_name)
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard("lobby", self.channel_name)
+
+    async def user_count_update(self, event):
+        # Envia dados para o frontend
+        await self.send(text_data=json.dumps({
+            'room': event['room'],
+            'count': event['count'],
+        }))
+        

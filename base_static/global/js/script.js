@@ -8,7 +8,7 @@ const typingIndicator = document.getElementById('typing-indicator');
 let typingTimer;
 const TYPING_INTERVAL = 1000;
 
-const roomName = document.body.dataset.room || "sala123";
+const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const currentUserId = parseInt(document.body.dataset.userId);
 
 const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -26,7 +26,7 @@ chatSocket.onmessage = function (e) {
 
   if (data.type === 'online_count') {
     if (onlineCount) {
-      const onlineUsers = data.count - 1;
+      const onlineUsers = data.count;
       onlineCount.textContent = `🟢 ${onlineUsers} usuário${onlineUsers === 1 ? '' : 's'} online`;
     }
     return;

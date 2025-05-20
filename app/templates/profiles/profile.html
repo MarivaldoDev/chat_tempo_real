@@ -12,10 +12,18 @@
   <header>
     <div class="room-name">Meu Perfil</div>
       <div class="dropdown">
-      {% if user.image_profile %}
-        <img src="{{ user.image_profile.url }}" alt="Perfil" class="profile-pic">
+      {% if user == request.user %}      
+        {% if request.user.image_profile %}
+          <img src="{{ request.user.image_profile.url }}" alt="Perfil" class="profile-pic">
+        {% else %}
+          <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
+        {% endif %}
       {% else %}
-        <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
+        {% if request.user.image_profile %}
+          <img src="{{ request.user.image_profile.url }}" alt="Perfil" class="profile-pic">
+        {% else %}
+          <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
+        {% endif %}
       {% endif %}
       <div class="dropdown-content">    
         <a href="{% url 'logout' %}">Logout</a>
