@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseForbidden
 from django_redis import get_redis_connection
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 import cowsay
 
 
@@ -87,6 +89,15 @@ def my_profile(request, username: str):
     return render(request, 'profiles/profile.html', {'user': user, 'request_user': request.user})
 
 
+def delete_profile(request, id: int):
+    user = get_object_or_404(User, id=id)
+
+    user.delete()
+    messages.success(request, "Usuário deletado com sucesso!")
+    
+    return redirect('home')
+
+
 @login_required(login_url='home')
 def logout_view(request):
     logout(request)
@@ -116,6 +127,18 @@ def create_chat(request):
         room.save()
         room.users.add(request.user)
         messages.success(request, "Sala criada com sucesso!")
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+        "lobby",
+        {
+            "type": "new_room",
+            "room": {
+                "name": room.name,
+                "description": room.description,
+            }
+        }
+    )
         return redirect('room', room_name=room.name)
     
     return render(request, 'chat/create_chat.html', {'form': form})

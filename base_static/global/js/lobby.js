@@ -15,4 +15,25 @@ lobbySocket.onmessage = function(e) {
             userCountElement.textContent = `🟢 ${count} usuário${count > 1 ? 's' : ''} online`;
         }
     }
+
+    if (data.type === 'new_room') {
+        const room = data.room;
+
+        // Verifica se sala já existe
+        if (document.getElementById('chat-card-' + room.name)) return;
+
+        const newCard = document.createElement('div');
+        newCard.className = 'chat-card';
+        newCard.id = 'chat-card-' + room.name;
+
+        newCard.innerHTML = `
+            <h3 class="chat-title">${room.name}</h3>
+            <p class="chat-description">${room.description}</p>
+            <p id="user-count-${room.name}" class="chat-users">Nenhum usuário online</p>
+            <a href="/chat/${room.name}/" class="btn-enter-room">Entrar na Sala</a>
+        `;
+
+        const grid = document.querySelector('.chat-grid');
+        grid.appendChild(newCard);
+    }
 };

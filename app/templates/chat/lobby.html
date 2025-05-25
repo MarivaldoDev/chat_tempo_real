@@ -10,12 +10,33 @@
     <title>Chats Disponíveis</title>
 </head>
 <body>
-    <header class="header">
-        <h1>Salas Disponíveis</h1>
-        <div class="create-room">
-            <a href="{% url 'create_chat' %}" class="btn-create-room">Criar Nova Sala</a>
+    <header>
+    <div class="room-name">Meu Perfil</div>
+      <div class="dropdown">
+      {% if user == request.user %}      
+        {% if request.user.image_profile %}
+          <img src="{{ request.user.image_profile.url }}" alt="Perfil" class="profile-pic">
+        {% else %}
+          <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
+        {% endif %}
+        <div class="dropdown-content"> 
+          <a href="{% url 'my_profile' user.username %}">Meu Perfil</a>   
+          <a href="{% url 'logout' %}">Logout</a>
         </div>
-    </header>
+      {% else %}
+        {% if request.user.image_profile %}
+          <img src="{{ request.user.image_profile.url }}" alt="Perfil" class="profile-pic">
+        {% else %}
+          <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
+        {% endif %}
+        <div class="dropdown-content">    
+          <a href="{% url 'my_profile' request.user.username %}">Meu Perfil</a>
+          <a href="{% url 'chats' %}">Lobby</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        </div>
+      {% endif %}
+    </div>
+  </header>
     <main class="chat-grid">
         {% for chat in chats %}
             <div class="chat-card">
@@ -30,6 +51,9 @@
                 <a href="{% url 'room' chat %}" class="btn-enter-room">Entrar na Sala</a>
             </div>
         {% endfor %}
+        <div class="chat-card create-room-card">
+            <a href="{% url 'create_chat' %}" class="btn-create-room-large">+ Criar Nova Sala</a>
+        </div>
     </main>
     <script src="{% static 'global/js/lobby.js' %}"></script>
 </body>

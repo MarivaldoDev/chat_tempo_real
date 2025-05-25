@@ -18,7 +18,8 @@
         <img src="{% static 'global/images/image_default.png' %}" alt="Perfil" class="profile-pic">
       {% endif %}
       <div class="dropdown-content">    
-        <a href="{% url 'my_profile' request.user.username %}">Ver Perfil</a>
+        <a href="{% url 'my_profile' request.user.username %}">Meu Perfil</a>
+        <a href="{% url 'chats' %}">Lobby</a>
         <a href="{% url 'logout' %}">Logout</a>
       </div>
     </div>

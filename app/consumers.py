@@ -225,4 +225,11 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             'room': event['room'],
             'count': event['count'],
         }))
+    
+    async def new_room(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'new_room',
+            'room': event['room'],
+        }))
+
         
