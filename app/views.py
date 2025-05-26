@@ -113,7 +113,7 @@ def lobby(request):
         count = redis.scard(get_online_key(room.name))
         online_counts[room.name] = count
     
-    return render(request, 'chat/lobby.html', {"chats": rooms, 'onlines': online_counts})
+    return render(request, 'chat/lobby.html', {'chats': rooms, 'onlines': online_counts})
 
 
 def create_chat(request):
@@ -142,6 +142,28 @@ def create_chat(request):
         return redirect('room', room_name=room.name)
     
     return render(request, 'chat/create_chat.html', {'form': form})
+
+
+def update_chat(request, id: int):
+    room = get_object_or_404(Room, id=id)
+    form = ChatForm(instance=room)
+
+    if request.method == "POST":
+        form = ChatForm(request.POST, instance=room)
+        if form.is_valid():
+            room = form.save(commit=False)
+            room.save()
+            return redirect('room', room_name=room.name)
+    
+    return render(request, 'chat/update_chat.html', {'form': form, 'room': room})
+
+def delete_chat(request, id: int):
+    room = get_object_or_404(Room, id=id)
+
+    room.delete()
+    messages.success(request, "Sala deletada com sucesso!")
+    
+    return redirect('chats')
 
 
 @login_required(login_url='home')

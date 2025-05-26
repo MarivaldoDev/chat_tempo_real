@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Chat</title>
+    {% include 'partials/_links.html' %}
+    <link rel="stylesheet" href="{% static 'global/css/create_chat.css' %}">
+</head>
+<body>
+  <div class="create-chat-container">
+    {% include 'partials/_messages.html' %}
+    <h1>💬 Crie um novo chat</h1>
+    <form action="{% url 'update_chat' room.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {% include 'partials/_register-form.html' %}
+        {% include 'partials/_messages.html' %}
+      <button type="submit">Atualizar Sala</button>
+    </form>
+    <div class="footer">Python + Django é muito massa 🚀</div>
+  </div>
+</body>
+</html>
