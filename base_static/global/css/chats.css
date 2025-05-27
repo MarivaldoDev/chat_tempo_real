@@ -261,6 +261,24 @@ header {
     transform: scale(1.05);
 }
 
+.success-message {
+  background-color: rgba(76, 175, 80, 0.9);
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 100px;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  background-color: rgba(207, 33, 33, 0.9);
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 50px;
+  font-size: 0.95rem;
+}
+
 
 @media (max-width: 768px) {
   .header h1 {

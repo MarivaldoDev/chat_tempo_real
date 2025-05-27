@@ -10,7 +10,7 @@
     <title>Chats Disponíveis</title>
 </head>
 <body>
-    <header>
+  <header>
     <div class="room-name">Meu Perfil</div>
       <div class="dropdown">
         {% if user.image_profile %}
@@ -22,46 +22,49 @@
           <a href="{% url 'my_profile' user.username %}">Meu Perfil</a>
           <a href="{% url 'logout' %}">Logout</a>
         </div>
+      </div>
     </div>
   </header>
-    <main class="chat-grid">
-        {% for chat in chats %}
-            <div class="chat-card">
-              <div class="top-bar">
-                <div class="menu-container" tabindex="0">
-                  <div class="menu-opcoes" tabindex="0">
-                    <div class="ponto"></div>
-                    <div class="ponto"></div>
-                    <div class="ponto"></div>
-                  </div>
-                  {% if user.username != chat.users.first.username %}                 
-                    <div class="dropdown-menu">
-                      <a href="#">Compartilhar</a>
-                    </div>
-                  {% else %}
-                    <div class="dropdown-menu">
-                      <a href="{% url 'update_chat' chat.id %}">Editar</a>
-                      <a href="{% url 'delete_chat' chat.id%}">Excluir</a>
-                      <a href="#">Compartilhar</a>
-                    </div>
-                  {% endif %}
-                </div>
+  {% include 'partials/_messages.html' %}
+  <main class="chat-grid">
+    {% for chat in chats %}
+        <div class="chat-card">
+          <div class="top-bar">
+            <div class="menu-container" tabindex="0">
+              <div class="menu-opcoes" tabindex="0">
+                <div class="ponto"></div>
+                <div class="ponto"></div>
+                <div class="ponto"></div>
               </div>
-              <h3 class="chat-title">{{ chat }}</h3>
-              <p id="user-count-{{ chat.name }}" class="chat-users">
-                  {% if onlines|get_item:chat.name == 0 %}
-                      Nenhum usuário online
-                  {% else %}
-                      🟢 {{ onlines|get_item:chat.name }} usuários online
-                  {% endif %}
-              </p>
-              <a href="{% url 'room' chat %}" class="btn-enter-room">Entrar na Sala</a>
+              {% if user.username != chat.users.first.username %}                 
+                <div class="dropdown-menu">
+                  <a href="#">Compartilhar</a>
+                </div>
+              {% else %}
+                <div class="dropdown-menu">
+                  <a href="{% url 'update_chat' chat.id %}">Editar</a>
+                  <a href="{% url 'delete_chat' chat.id%}">Excluir</a>
+                  <a href="#">Compartilhar</a>
+                </div>
+              {% endif %}
             </div>
-        {% endfor %}
-        <div class="chat-card create-room-card">
-            <a href="{% url 'create_chat' %}" class="btn-create-room-large">+ Criar Nova Sala</a>
-        </div>
-    </main>
-    <script src="{% static 'global/js/lobby.js' %}"></script>
+          </div>
+            <h3 class="chat-title">{{ chat }}</h3>
+            <h5 class="chat-description">{{ chat.description }}</h5>
+            <p id="user-count-{{ chat.name }}" class="chat-users">
+                {% if onlines|get_item:chat.name == 0 %}
+                    Nenhum usuário online
+                {% else %}
+                    🟢 {{ onlines|get_item:chat.name }} usuários online
+                {% endif %}
+            </p>
+            <a href="{% url 'room' chat %}" class="btn-enter-room">Entrar na Sala</a>
+          </div>
+      {% endfor %}
+      <div class="chat-card create-room-card">
+          <a href="{% url 'create_chat' %}" class="btn-create-room-large">+ Criar Nova Sala</a>
+      </div>
+  </main>
+  <script src="{% static 'global/js/lobby.js' %}"></script>
 </body>
 </html>
