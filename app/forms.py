@@ -76,8 +76,8 @@ class ChatForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'name': 'description', 'placeholder': 'Descrição da sala (Opcional)', 'rows': 3})
         }
 
-        def clean_name(self):
-            name = self.cleaned_data.get('name')
-            if Room.objects.filter(name=name).exists():
-                raise forms.ValidationError("Esse nome de sala já existe.")
-            return name
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if Room.objects.filter(name=name).exists():
+            raise forms.ValidationError("Esse nome de sala já existe.")
+        return name

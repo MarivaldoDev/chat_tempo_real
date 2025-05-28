@@ -7,6 +7,7 @@ from app.forms import UserForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseForbidden
+from time import sleep
 import cowsay
 
 
@@ -25,6 +26,8 @@ def home(request):
         if user:
             login(request, user)
             cowsay.python(f'Usuário {username} fez login!')
+
+            sleep(2)
             return redirect('chats')
     else:
         for error in form.errors:

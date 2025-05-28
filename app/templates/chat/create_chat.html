@@ -14,7 +14,6 @@
     <h1>💬 Crie um novo chat</h1>
     <form action="{% url 'create_chat' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
         {% include 'partials/_register-form.html' %}
-        {% include 'partials/_messages.html' %}
       <button type="submit">Criar Sala</button>
     </form>
     <div class="footer">Python + Django é muito massa 🚀</div>

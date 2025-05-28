@@ -1,4 +1,4 @@
-from app.models import Room
+from app.models import Room, User
 from django.shortcuts import render, get_object_or_404, redirect
 from app.forms import ChatForm
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,7 @@ from app.utils.extra_functions import get_online_key
 from django.contrib import messages
 
 
+@login_required(login_url='home')
 def lobby(request):
     rooms = Room.objects.all()
     redis = get_redis_connection("default")
@@ -19,6 +20,9 @@ def lobby(request):
         online_counts[room.name] = count
     
     return render(request, 'chat/lobby.html', {'chats': rooms, 'onlines': online_counts})
+    
+"""     messages.error(request, "Você precisa estar logado para acessar o lobby.")
+    return redirect('home') """
 
 
 @login_required(login_url='home')
@@ -46,6 +50,10 @@ def create_chat(request):
         }
     )
         return redirect('room', room_name=room.name)
+    
+    if form.errors:
+        for error in form.errors:
+            messages.error(request, form.errors[error])
     
     return render(request, 'chat/create_chat.html', {'form': form})
 
