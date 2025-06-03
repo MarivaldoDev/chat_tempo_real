@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .utils.extra_functions import sao_paulo_now
 
 
 class User(AbstractUser):
+    last_login = models.DateTimeField(default=sao_paulo_now, blank=True, null=True)
     image_profile = models.ImageField(upload_to='profile_images/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True, default='')
     

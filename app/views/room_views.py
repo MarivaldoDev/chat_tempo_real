@@ -1,4 +1,4 @@
-from app.models import Room, User
+from app.models import Room
 from django.shortcuts import render, get_object_or_404, redirect
 from app.forms import ChatForm
 from django.contrib.auth.decorators import login_required
@@ -21,9 +21,6 @@ def lobby(request):
     
     return render(request, 'chat/lobby.html', {'chats': rooms, 'onlines': online_counts})
     
-"""     messages.error(request, "Você precisa estar logado para acessar o lobby.")
-    return redirect('home') """
-
 
 @login_required(login_url='home')
 def create_chat(request):
@@ -64,11 +61,14 @@ def update_chat(request, id: int):
     form = ChatForm(instance=room)
 
     if request.method == "POST":
-        form = ChatForm(request.POST, instance=room)
-        if form.is_valid():
+        form = ChatForm(data=request.POST, instance=room)
+        if form.is_valid(): 
             room = form.save(commit=False)
             room.save()
             return redirect('room', room_name=room.name)
+    if form.errors:
+        for error in form.errors:
+            messages.error(request, form.errors[error])
     
     return render(request, 'chat/update_chat.html', {'form': form, 'room': room})
 

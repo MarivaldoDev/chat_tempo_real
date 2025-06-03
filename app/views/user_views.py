@@ -7,11 +7,15 @@ from app.forms import UserForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseForbidden
-from time import sleep
+from django.utils import timezone
+from app.consumers import is_user_online
+from asgiref.sync import async_to_sync
+from app.utils.extra_functions import get_last_seen_display
 import cowsay
 
 
 def home(request):
+    print(timezone.localtime())
     if request.method == "GET":
         form = LoginForm()
         return render(request, 'home/home.html', {'form': form})
@@ -27,7 +31,6 @@ def home(request):
             login(request, user)
             cowsay.python(f'Usuário {username} fez login!')
 
-            sleep(2)
             return redirect('chats')
     else:
         for error in form.errors:
@@ -52,6 +55,7 @@ def register(request):
     if form.errors:
         for error in form.errors:
             messages.error(request, form.errors[error])
+    
     return render(request, 'home/register.html', {'form': form})
 
 
@@ -82,7 +86,13 @@ def register_update(request, id: int):
 @login_required(login_url='acesso_negado')
 def my_profile(request, username: str):
     user = get_object_or_404(User, username=username)
-    return render(request, 'profiles/profile.html', {'user': user, 'request_user': request.user})
+    online_status = bool(async_to_sync(is_user_online)(user.id))
+    
+    if online_status:
+        status = 'Online'
+    else:
+        status = get_last_seen_display(user.id)
+    return render(request, 'profiles/profile.html', {'user': user, 'request_user': request.user, 'status': status})
 
 
 @login_required(login_url='acesso_negado')
