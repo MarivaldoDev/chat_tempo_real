@@ -1,14 +1,14 @@
+import datetime
+import pytz
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.utils import timezone
-import pytz
-import datetime
 from django.utils.timezone import localtime, now
 from django_redis import get_redis_connection
 
 
 def acesso_negado(request):
-    return HttpResponseForbidden(render(request, 'home/acesso_negado.html'))
+    return HttpResponseForbidden(render(request, "home/acesso_negado.html"))
 
 
 def get_online_key(room_name):
@@ -16,7 +16,7 @@ def get_online_key(room_name):
 
 
 def sao_paulo_now():
-    return timezone.now().astimezone(pytz.timezone('America/Sao_Paulo'))
+    return timezone.now().astimezone(pytz.timezone("America/Sao_Paulo"))
 
 
 def is_user_online(user_id, room_name):
