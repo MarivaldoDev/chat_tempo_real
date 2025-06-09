@@ -69,7 +69,29 @@ chatSocket.onmessage = function (e) {
     ? new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     : "";
   
-  msgDiv.innerHTML = `
+  if (data.user_id === currentUserId) {
+    msgDiv.innerHTML = `
+    <div class="message-bubble">
+      <div class="user-info">
+        ${profileImg}
+        ${usernameLink}
+        <div class="menu-container" tabindex="0">
+          <div class="menu-opcoes" tabindex="0">
+            <div class="ponto"></div>
+            <div class="ponto"></div>
+            <div class="ponto"></div>
+          </div>
+          <div class="dropdown-menu">
+            <a href="/chat/delete_message/${data.message_id}">Excluir</a>
+          </div>
+        </div>
+      </div>
+      <p>${data.message}</p>
+    </div>
+    <span class="timestamp">${hora}</span>
+  `;
+  } else {
+    msgDiv.innerHTML = `
     <div class="message-bubble">
       <div class="user-info">
         ${profileImg}
@@ -79,6 +101,7 @@ chatSocket.onmessage = function (e) {
     </div>
     <span class="timestamp">${hora}</span>
   `;
+  }
   
     messages.appendChild(msgDiv);
     messages.scrollTop = messages.scrollHeight;

@@ -67,6 +67,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     {
                         "type": "chat_message",
                         "message": msg.content,
+                        "message_id": msg.id,
                         "username": msg.user.username,
                         "user_id": msg.user.id,
                         "image_profile": (

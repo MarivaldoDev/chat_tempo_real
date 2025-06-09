@@ -1,6 +1,6 @@
 from django.urls import path
 from app.utils import extra_functions
-from .views import room_views, user_views
+from .views import room_views, user_views, message_views
 
 
 urlpatterns = [
@@ -14,6 +14,7 @@ urlpatterns = [
     path("chats/update_chat/<int:id>/", room_views.update_chat, name="update_chat"),
     path("chats/delete_chat/<int:id>/", room_views.delete_chat, name="delete_chat"),
     path("chat/<str:room_name>/", room_views.room, name="room"),
+    path("chat/delete_message/<int:id>/", message_views.delete_message, name="delete_message"),
     path("myprofile/<str:username>/", user_views.my_profile, name="my_profile"),
     path(
         "myprofile/deletar/<int:id>/", user_views.delete_profile, name="delete_profile"
