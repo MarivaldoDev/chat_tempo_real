@@ -80,7 +80,7 @@ CACHES = {
 }
 
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DATABASE_NAME'),
@@ -89,7 +89,15 @@ DATABASES = {
         'HOST': config('DATABASE_HOST'),  # ou o IP/hostname do servidor do banco
         'PORT': config('DATABASE_PORT'),       # porta padrão do PostgreSQL
     }
+} """
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
