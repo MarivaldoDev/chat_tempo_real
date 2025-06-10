@@ -9,7 +9,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', '.railway.app']
 """ CSRF_TRUSTED_ORIGINS = [
     'https://84d1-2804-29b8-51a6-4541-4b6f-c68-f448-b655.ngrok-free.app'
 ]  """
