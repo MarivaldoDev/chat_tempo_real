@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import config
+import dj_database_url
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -62,7 +63,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [config("REDIS_URL")],
+            "hosts": [config("REDIS_URL"), 18652],
         },
     }
 }
@@ -71,7 +72,7 @@ CHANNEL_LAYERS = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config("REDIS_URL"),
+        "LOCATION": [config("REDIS_URL"), 18652],
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -81,11 +82,14 @@ CACHES = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),  # ou o IP/hostname do servidor do banco
+        'PORT': config('DATABASE_PORT'),       # porta padrão do PostgreSQL
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
