@@ -2,10 +2,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+from django.http import JsonResponse
 
 
 urlpatterns = [
-    path('', include('app.urls')),
+    path('', lambda request: JsonResponse({'status': 'ok', 'message': 'Django respondendo com sucesso!'})),
     path('admin/', admin.site.urls),
 ]
 
