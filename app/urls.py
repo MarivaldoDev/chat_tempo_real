@@ -1,11 +1,10 @@
 from django.urls import path
 from app.utils import extra_functions
 from .views import room_views, user_views, message_views
-from django.http import JsonResponse
 
 
 urlpatterns = [
-    path("", lambda r: JsonResponse({"ok": True})),
+    path("", user_views.home, name="home"),
     path("register/", user_views.register, name="register"),
     path(
         "register_update/<int:id>/", user_views.register_update, name="register_update"
