@@ -137,10 +137,12 @@ STATICFILES_DIRS = (
 )
 STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_URL = '/media/'
+
 MEDIA_ROOT = BASE_DIR / 'media'
 
-if DEBUG == False:
+if DEBUG:
+    MEDIA_URL = '/media/'
+else:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
     CLOUDINARY_STORAGE = {
