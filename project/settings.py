@@ -143,7 +143,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 if DEBUG:
     MEDIA_URL = '/media/'
 else:
-    MEDIA_URL = f'cloudinary://{config('CLOUDINARY_API_KEY')}:{config('CLOUDINARY_API_SECRET')}@dyedlk8m7'
+    MEDIA_URL = f'cloudinary://{config('CLOUDINARY_API_KEY')}:{config('CLOUDINARY_API_SECRET')}@dyedlk8m7/'
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
     CLOUDINARY_STORAGE = {
