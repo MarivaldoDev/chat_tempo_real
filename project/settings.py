@@ -9,9 +9,9 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*', '.railway.app']
+ALLOWED_HOSTS = ['.railway.app', '*']
 CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-50a2b.up.railway.app/',
+    'https://web-production-50a2b.up.railway.app',
 ]
 
 
