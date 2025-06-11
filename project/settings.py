@@ -1,6 +1,6 @@
 from pathlib import Path
 from decouple import config
-import dj_database_url
+import cloudinary_storage
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,10 +24,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
+    'app',
     'cloudinary',
     'cloudinary_storage',
-    'channels',
-    'app'
 ]
 
 MIDDLEWARE = [
@@ -137,14 +137,6 @@ STATICFILES_DIRS = (
 )
 STATIC_ROOT = BASE_DIR / 'static'
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config('CLOUDINARY_NAME'),
-    'API_KEY': config('CLOUDINARY_API_KEY'),
-    'API_SECRET': config('CLOUDINARY_API_SECRET'),
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -187,3 +179,12 @@ JAZZMIN_SETTINGS = {
     # Whether to show the UI customizer on the sidebar
     'show_ui_builder': True,
 }
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
