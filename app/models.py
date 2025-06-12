@@ -1,13 +1,12 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from .utils.extra_functions import sao_paulo_now
-from cloudinary.models import CloudinaryField
 
 
 class User(AbstractUser):
     last_login = models.DateTimeField(default=sao_paulo_now, blank=True, null=True)
-    image_profile = CloudinaryField(
-        "image_profile", blank=True, null=True
+    image_profile = models.ImageField(
+        upload_to="profile_images/", blank=True, null=True
     )
     bio = models.TextField(blank=True, null=True, default="")
 
