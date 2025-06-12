@@ -1,6 +1,9 @@
 from pathlib import Path
 from decouple import config
-import cloudinary_storage
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from cloudinary_storage.storage import RawMediaCloudinaryStorage, MediaCloudinaryStorage
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
