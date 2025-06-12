@@ -1,18 +1,14 @@
 from pathlib import Path
 from decouple import config
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-from cloudinary_storage.storage import RawMediaCloudinaryStorage, MediaCloudinaryStorage
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.railway.app', '*']
+ALLOWED_HOSTS = ['.railway.app','*']
 CSRF_TRUSTED_ORIGINS = [
     'https://web-production-50a2b.up.railway.app',
 ]
@@ -140,12 +136,10 @@ STATICFILES_DIRS = (
 )
 STATIC_ROOT = BASE_DIR / 'static'
 
-
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-if DEBUG:
-    MEDIA_URL = '/media/'
-else:
+if not DEBUG:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
     CLOUDINARY_STORAGE = {
