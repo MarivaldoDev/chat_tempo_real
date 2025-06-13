@@ -115,3 +115,7 @@ def logout_view(request):
 
 def acesso_negado(request):
     return HttpResponseForbidden(render(request, "home/acesso_negado.html"))
+
+
+def not_found(request, exception):
+    return render(request, "errors/404.html", status=404)

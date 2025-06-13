@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'global/css/404.css' %}">
+  {% include 'partials/_links.html' %}
+  <title>Erro 404 - Página não encontrada</title>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-icon">🚫</div>
+    <div class="error-code">404</div>
+    <div class="error-message">
+      Opa! A página que você tentou acessar não existe.<br />
+      Verifique o endereço ou volte para o lobby.
+    </div>
+    <a href="{% url 'chats' %}">🔙 Voltar para o Lobby</a>
+  </div>
+</body>
+</html>
