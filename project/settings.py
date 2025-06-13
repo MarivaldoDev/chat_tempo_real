@@ -147,7 +147,7 @@ else:
     }
 
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    MEDIA_URL = f"https://res.cloudinary.com/{config('CLOUDINARY_NAME')}/"
+    MEDIA_URL = f"https://res.cloudinary.com/{config('CLOUDINARY_NAME')}/image/upload/"
 
 
 # Default primary key field type
