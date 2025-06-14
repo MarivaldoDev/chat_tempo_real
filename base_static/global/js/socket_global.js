@@ -1,4 +1,5 @@
-const presenceSocket = new WebSocket('ws://' + window.location.host + '/ws/presence/');
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const presenceSocket = new WebSocket(`${protocol}://${window.location.host}/ws/presence/`);
 presenceSocket.onopen = () => {
     console.log("Conectado ao WebSocket global de presença");
 };
