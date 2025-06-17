@@ -55,3 +55,8 @@ Este é um projeto de chat em tempo real desenvolvido com **Django** e **Django 
     ```bash
     python3 manage.py runserver # Linux/macOS
     python manage.py runserver # Windows
+
+---
+
+## 📸 Pré - visualização
+https://www.youtube.com/watch?v=XUeoFVSfsXg&list=RDMMXUeoFVSfsXg&start_radio=1
