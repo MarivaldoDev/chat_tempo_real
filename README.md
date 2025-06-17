@@ -59,4 +59,4 @@ Este é um projeto de chat em tempo real desenvolvido com **Django** e **Django 
 ---
 
 ## 📸 Pré - visualização
-https://www.youtube.com/watch?v=XUeoFVSfsXg&list=RDMMXUeoFVSfsXg&start_radio=1
+![Image](https://github.com/user-attachments/assets/fc7627f4-a307-42e2-8c7f-1206b4cdff33)
