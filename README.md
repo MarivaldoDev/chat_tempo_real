@@ -48,7 +48,8 @@ Este é um projeto de chat em tempo real desenvolvido com **Django** e **Django 
 
 5. Aplique as migrações:
     ```bash
-    python manage.py migrate
+    python3 manage.py migrate # Linux/macOS
+    python manage.py migrate # Windows
 
 6. Inicie o servidor:
     ```bash
