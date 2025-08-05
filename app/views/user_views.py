@@ -27,8 +27,6 @@ def home(request):
 
         if user:
             login(request, user)
-            """ cowsay.python(f"Usuário {username} fez login!") """
-
             return redirect("chats")
     else:
         for error in form.errors:
