@@ -6,7 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = config("DEBUG", default=False, cast=bool)
+#DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['.railway.app','*']
@@ -67,7 +68,7 @@ if DEBUG:
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": ["redis://localhost:6379"],
+                "hosts": [("redis", 6379)],
             },
         }
     }
@@ -76,7 +77,7 @@ if DEBUG:
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": "redis://127.0.0.1:6379/1",
+            "LOCATION": "redis://redis:6379/0",
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
