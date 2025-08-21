@@ -11,20 +11,19 @@ services:
     ports:
       - "5432:5432"
 
-
   redis:
     image: redis:7-alpine
-    container_name: redis_server
     ports:
       - "6379:6379"
+
   chat-app:
     build: .
-    ports:
-      - "8000:8000"
+    image: chat-app
+    restart: always
     volumes:
       - .:/app
-    image: chat-image
-    container_name: chat
+    ports:
+      - "8000:8000"
     depends_on:
       - db
       - redis

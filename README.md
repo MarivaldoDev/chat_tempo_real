@@ -58,5 +58,18 @@ Este é um projeto de chat em tempo real desenvolvido com **Django** e **Django 
 
 ---
 
+## 🐳 Executando com Docker
+
+1. Certifique-se de ter o Docker e o Docker Compose instalados.
+
+2. Construa e inicie os containers:
+    ```bash
+    docker-compose up --build
+    ```
+
+3. Acesse a aplicação em [http://localhost:8000](http://localhost:8000).
+
+---
+
 ## 📸 Pré - visualização
 ![Image](https://github.com/user-attachments/assets/fc7627f4-a307-42e2-8c7f-1206b4cdff33)
